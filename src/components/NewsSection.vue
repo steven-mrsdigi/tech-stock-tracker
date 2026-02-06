@@ -1,0 +1,105 @@
+<template>
+  <v-card class="news-section" elevation="4">
+    <v-card-title class="d-flex align-center">
+      <v-icon color="primary" class="mr-2">mdi-newspaper</v-icon>
+      {{ $t('news.title') }}
+    </v-card-title>
+    <v-card-subtitle>{{ $t('news.subtitle') }}</v-card-subtitle>
+    <v-card-text>
+      <v-row>
+        <v-col
+          v-for="item in stockStore.news"
+          :key="item.id"
+          cols="12"
+          md="6"
+        >
+          <v-card
+            variant="outlined"
+            class="news-item mb-4"
+            hover
+          >
+            <v-card-title class="text-subtitle-1 font-weight-bold">
+              {{ locale === 'zh' ? item.titleZh : item.title }}
+            </v-card-title>
+            <v-card-text>
+              <p class="text-body-2 text-grey-darken-1 mb-3">
+                {{ locale === 'zh' ? item.summaryZh : item.summary }}
+              </p>
+              <div class="d-flex align-center flex-wrap gap-2">
+                <v-chip
+                  v-for="symbol in item.relatedStocks"
+                  :key="symbol"
+                  size="x-small"
+                  color="primary"
+                  variant="flat"
+                >
+                  {{ symbol }}
+                </v-chip>
+                <v-spacer></v-spacer>
+                <span class="text-caption text-grey">{{ item.source }}</span>
+                <span class="text-caption text-grey">•</span>
+                <span class="text-caption text-grey">{{ formatDate(item.publishedAt) }}</span>
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                variant="text"
+                color="primary"
+                size="small"
+                :href="item.url"
+                target="_blank"
+              >
+                {{ $t('news.readMore') }}
+                <v-icon end size="16">mdi-open-in-new</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStockStore } from '@/stores/stocks'
+
+const stockStore = useStockStore()
+const { locale } = useI18n()
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diff = now.getTime() - date.getTime()
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  
+  if (hours < 1) {
+    return locale.value === 'zh' ? '剛剛' : 'Just now'
+  } else if (hours < 24) {
+    return locale.value === 'zh' ? `${hours}小時前` : `${hours}h ago`
+  } else {
+    return date.toLocaleDateString(locale.value === 'zh' ? 'zh-CN' : 'en-US')
+  }
+}
+</script>
+
+<style scoped>
+.news-section {
+  border-radius: 16px;
+}
+
+.news-item {
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.news-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.gap-2 {
+  gap: 8px;
+}
+</style>
