@@ -3,7 +3,9 @@ export default {
     title: 'Tech Stock Tracker',
     stocks: 'Stocks',
     news: 'News',
-    chart: 'Chart'
+    chart: 'Chart',
+    darkMode: 'Dark',
+    lightMode: 'Light'
   },
   stocks: {
     title: 'Top 5 Tech Stocks',

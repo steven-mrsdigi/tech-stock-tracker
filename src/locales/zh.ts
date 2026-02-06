@@ -3,7 +3,9 @@ export default {
     title: '科技股追蹤',
     stocks: '股票',
     news: '新聞',
-    chart: '圖表'
+    chart: '圖表',
+    darkMode: '深色',
+    lightMode: '淺色'
   },
   stocks: {
     title: '五大科技股',

@@ -16,9 +16,11 @@ import App from './App.vue'
 import en from './locales/en'
 import zh from './locales/zh'
 
-// Get saved language or default to English
+// Get saved preferences or defaults
 const savedLang = localStorage.getItem('preferred-language')
 const defaultLang = savedLang || 'en'
+const savedTheme = localStorage.getItem('preferred-theme')
+const defaultTheme = savedTheme || 'light'
 
 const i18n = createI18n({
   legacy: false,
@@ -34,14 +36,25 @@ const vuetify = createVuetify({
   components,
   directives,
   theme: {
-    defaultTheme: 'light',
+    defaultTheme: defaultTheme,
     themes: {
       light: {
         colors: {
           primary: '#667eea',
           secondary: '#764ba2',
           success: '#4caf50',
-          error: '#f44336'
+          error: '#f44336',
+          background: '#f5f5f5'
+        }
+      },
+      dark: {
+        colors: {
+          primary: '#8b9dc3',
+          secondary: '#a48bc2',
+          success: '#66bb6a',
+          error: '#ef5350',
+          background: '#121212',
+          surface: '#1e1e1e'
         }
       }
     }

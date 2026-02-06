@@ -8,6 +8,17 @@
       </v-app-bar-title>
       <v-spacer></v-spacer>
       
+      <!-- Theme Toggle -->
+      <v-btn
+        variant="text"
+        color="white"
+        @click="toggleTheme"
+        class="text-none mr-2"
+      >
+        <v-icon start>{{ theme.global.name.value === 'light' ? 'mdi-weather-night' : 'mdi-white-balance-sunny' }}</v-icon>
+        {{ theme.global.name.value === 'light' ? (locale === 'zh' ? '深色' : 'Dark') : (locale === 'zh' ? '淺色' : 'Light') }}
+      </v-btn>
+
       <!-- Language Switch -->
       <v-btn
         variant="text"
@@ -21,7 +32,7 @@
     </v-app-bar>
 
     <!-- Main Content -->
-    <v-main class="bg-grey-lighten-4">
+    <v-main :class="theme.global.name.value === 'light' ? 'bg-grey-lighten-4' : 'bg-grey-darken-4'">
       <v-container class="py-6">
         <!-- Page Title -->
         <v-row justify="center" class="mb-6">
@@ -29,7 +40,7 @@
             <h1 class="text-h3 font-weight-bold text-primary mb-2">
               {{ $t('nav.title') }}
             </h1>
-            <p class="text-subtitle-1 text-grey-darken-1">
+            <p :class="theme.global.name.value === 'light' ? 'text-subtitle-1 text-grey-darken-1' : 'text-subtitle-1 text-grey-lighten-1'">
               Top 5 Tech Giants | 五大科技巨頭
             </p>
           </v-col>
@@ -59,7 +70,7 @@
     </v-main>
 
     <!-- Footer -->
-    <v-footer class="bg-grey-darken-3 text-white py-4">
+    <v-footer :class="theme.global.name.value === 'light' ? 'bg-grey-darken-3 text-white' : 'bg-black text-white'" class="py-4">
       <v-container>
         <div class="text-center">
           <p class="text-body-2 mb-1">
@@ -76,15 +87,22 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useTheme } from 'vuetify'
 import StockTable from '@/components/StockTable.vue'
 import StockChart from '@/components/StockChart.vue'
 import NewsSection from '@/components/NewsSection.vue'
 
 const { locale } = useI18n()
+const theme = useTheme()
 
 const toggleLanguage = () => {
   locale.value = locale.value === 'zh' ? 'en' : 'zh'
   localStorage.setItem('preferred-language', locale.value)
+}
+
+const toggleTheme = () => {
+  theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
+  localStorage.setItem('preferred-theme', theme.global.name.value)
 }
 </script>
 
